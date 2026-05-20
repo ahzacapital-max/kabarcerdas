@@ -1,0 +1,12 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/fetch",
+      "schedule": "0 */2 * * *"
+    },
+    {
+      "path": "/api/cron/rewrite",
+      "schedule": "30 */2 * * *"
+    }
+  ]
+}

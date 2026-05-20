@@ -1,0 +1,3 @@
+{
+  "/api/cron/rewrite/route": "app/api/cron/rewrite/route.js"
+}
