@@ -13,15 +13,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {
       title: article.seo_title || article.title + ' — KabarCerdas',
       description: article.seo_description || article.excerpt || '',
-      openGraph: {
-        title: article.title,
-        description: article.excerpt || '',
-        url: `https://kabarcerdas.id/artikel/${article.slug}`,
-        siteName: 'KabarCerdas',
-        locale: 'id_ID',
-        type: 'article',
-        publishedTime: article.published_at,
-      },
     }
   } catch {
     return { title: 'Artikel — KabarCerdas' }
@@ -85,7 +76,7 @@ export default async function ArticlePage({ params }: Props) {
             <div className="source-note">
               Artikel ini disusun berdasarkan laporan dari {article.source_name}.{' '}
               <a href={article.source_url} target="_blank" rel="noopener noreferrer nofollow">
-                Baca sumber asli ?
+                Baca sumber asli
               </a>
             </div>
           )}
