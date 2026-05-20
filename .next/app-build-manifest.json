@@ -1,9 +1,0 @@
-{
-  "pages": {
-    "/api/cron/rewrite/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/cron/rewrite/route.js"
-    ]
-  }
-}
