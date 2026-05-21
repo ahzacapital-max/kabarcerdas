@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'KabarCerdas',
     description: 'Berita terkini dari sumber terpercaya',
-    url: 'https://kabarcerdaspisan.vercel.app',
+    url: 'https://kabarcerdas.my.id',
     siteName: 'KabarCerdas',
     locale: 'id_ID',
     type: 'website',
