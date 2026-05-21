@@ -62,6 +62,7 @@ export default function AdminPage() {
   <Link href="/admin" className="admin-nav active">📊 Ringkasan</Link>
   <Link href="/admin/analytics" className="admin-nav">📈 Analitik</Link>
   <Link href="/admin/upload" className="admin-nav">✍️ Upload Bahan</Link>
+  <Link href="/admin/articles" className="admin-nav">📰 Kelola Artikel</Link>
   <Link href="/" className="admin-nav">🏠 Lihat Portal</Link>
 </nav>
       </aside>
