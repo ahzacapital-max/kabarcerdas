@@ -5,10 +5,13 @@ const ADMIN_USER = process.env.ADMIN_USER || 'admin'
 const ADMIN_PASS = process.env.ADMIN_PASS || 'kabarcerdas123'
 
 export function middleware(request: NextRequest) {
-  if (!request.nextUrl.pathname.startsWith('/admin') || 
-    request.nextUrl.pathname.startsWith('/api/admin')) {
-  return NextResponse.next()
-}
+  const path = request.nextUrl.pathname
+
+  if (path.startsWith('/api/')) {
+    return NextResponse.next()
+  }
+
+  if (!path.startsWith('/admin')) {
     return NextResponse.next()
   }
 
