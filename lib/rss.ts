@@ -52,7 +52,7 @@ export async function fetchAndSaveSource(source: {
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
 
     const xml = await res.text()
-    const items = parseRSS(xml).slice(0, 15) // max 15 per fetch
+    const items = parseRSS(xml).slice(0, 5) // max 15 per fetch
 
     for (const item of items) {
       try {

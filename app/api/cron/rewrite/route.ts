@@ -13,7 +13,7 @@ export async function GET(request: Request) {
   }
 
   try {
-    const raws = await getUnprocessedRaw(8) // proses 8 artikel per run
+    const raws = await getUnprocessedRaw(5) // proses 8 artikel per run
     if (raws.length === 0) {
       return NextResponse.json({ ok: true, processed: 0, message: 'Tidak ada artikel baru' })
     }
