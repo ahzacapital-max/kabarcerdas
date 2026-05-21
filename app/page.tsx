@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   },
 }
 
-const CATEGORIES = ['Nasional', 'Ekonomi', 'Teknologi', 'Dunia', 'Politik', 'Viral']
+const CATEGORIES = ['Nasional', 'Daerah', 'Ekonomi', 'Bisnis', 'Teknologi', 'Dunia', 'Politik', 'Olahraga', 'Sepakbola', 'Viral']
 
 export default async function HomePage() {
   const [hero, ...rest] = await getLatestArticles(13)

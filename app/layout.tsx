@@ -23,7 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="header-inner">
             <a href="/" className="site-logo">Kabar<span>Cerdas</span></a>
             <nav className="header-nav">
-              {['Nasional','Ekonomi','Teknologi','Dunia','Politik','Viral'].map((c) => (
+              {['Nasional','Daerah','Ekonomi','Bisnis','Teknologi','Dunia','Politik','Olahraga','Sepakbola','Viral'].map((c) => (
                 <a key={c} href={`/kategori/${c.toLowerCase()}`} className="header-nav-link">{c}</a>
               ))}
             </nav>
@@ -36,7 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="footer-inner">
             <div className="footer-logo">KabarCerdas</div>
             <div className="footer-copy">
-              © {new Date().getFullYear()} KabarCerdas · Berita terpercaya Indonesia
+              © {new Date().getFullYear()} KabarCerdas · Berita terkini dari sumber terpercaya, disajikan dengan jurnalisme berkualitas tinggi
             </div>
           </div>
         </footer>
