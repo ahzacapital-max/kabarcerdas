@@ -11,6 +11,9 @@ export type Article = {
   tags: string[]
   source_name: string | null
   source_url: string | null
+  seo_title: string | null
+  seo_description: string | null
+  status: string
   reading_time: number
   view_count: number
   published_at: string
