@@ -40,6 +40,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <div className="footer-logo">KabarCerdas</div>
             <div className="footer-copy">
               © {new Date().getFullYear()} KabarCerdas · Berita terkini dari sumber terpercaya, disajikan dengan jurnalisme berkualitas tinggi
+              <a href="/admin" style={{color:'rgba(255,255,255,.2)',fontSize:'.65rem',marginLeft:'1rem'}}>Admin</a>
             </div>
           </div>
         </footer>
