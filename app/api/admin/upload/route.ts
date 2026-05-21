@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     const result = await rewriteArticle({
       title: title || 'Artikel baru',
       content,
-      source: source || 'Upload Manual',
+      source: source || 'Redaksi KabarCerdas',
       url: '',
     })
 
@@ -35,7 +35,7 @@ export async function POST(request: Request) {
       context_note: result.context_note,
       category: result.category,
       tags: result.tags,
-      source_name: source || 'Upload Manual',
+      source_name: source || 'Redaksi KabarCerdas',
       source_url: null,
       seo_title: result.seo_title,
       seo_description: result.seo_description,
