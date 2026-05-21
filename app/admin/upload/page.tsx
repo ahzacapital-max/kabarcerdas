@@ -109,7 +109,7 @@ export default function UploadPage() {
 
             <div className="upload-form">
               <div className="form-group">
-                <label className="form-label">Judul / Topik <span style={{color:'var(--ink3)'}}}>(opsional)</span></label>
+                <label className="form-label">Judul / Topik <span style={{color:'var(--ink3)'}}>(opsional)</span></label>
                 <input
                   className="form-input"
                   placeholder="Contoh: Peluncuran Produk Baru PT XYZ"
@@ -119,7 +119,7 @@ export default function UploadPage() {
               </div>
 
               <div className="form-group">
-                <label className="form-label">Nama Sumber / Klien <span style={{color:'var(--ink3)'}}}>(opsional)</span></label>
+                <label className="form-label">Nama Sumber / Klien <span style={{color:'var(--ink3)'}}>(opsional)</span></label>
                 <input
                   className="form-input"
                   placeholder="Contoh: PT Maju Bersama, Pemkab Sumedang"
