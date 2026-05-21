@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Lora, DM_Sans } from 'next/font/google'
 import './globals.css'
+import GoogleAnalytics from './components/GoogleAnalytics'
 
 const lora = Lora({ subsets: ['latin'], variable: '--font-serif', display: 'swap' })
 const dmSans = DM_Sans({ subsets: ['latin'], variable: '--font-sans', display: 'swap' })
@@ -21,6 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="sitemap" href="/api/sitemap" />
       </head>
+	<GoogleAnalytics ga_id="G-TR84SCNXHB" />
       <body>
         <header className="site-header">
           <div className="header-inner">
