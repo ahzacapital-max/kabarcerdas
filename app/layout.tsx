@@ -8,7 +8,7 @@ const dmSans = DM_Sans({ subsets: ['latin'], variable: '--font-sans', display: '
 export const metadata: Metadata = {
   metadataBase: new URL('https://kabarcerdas.my.id'),
   title: { default: 'KabarCerdas', template: '%s — KabarCerdas' },
-  description: 'Berita terkini dari sumber terpercaya, disajikan dengan jurnalisme berkualitas tinggi.',
+  description: 'Konteks & signifikansi di setiap berita. Baca KabarCerdas — nyaman tanpa iklan, paham lebih dalam.',
   robots: { index: true, follow: true },
 }
 

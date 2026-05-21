@@ -57,14 +57,17 @@ export default async function ArticlePage({ params }: Props) {
               )}
             </div>
           </header>
-          {article.excerpt && <p className="article-lead">{article.excerpt}</p>}
-          <div className="article-body" dangerouslySetInnerHTML={{ __html: article.content }} />
           {article.context_note && (
-            <div className="context-box">
-              <h4>Konteks &amp; Signifikansi</h4>
+            <div className="context-box-top">
+              <div className="context-box-label">
+                <span className="context-dot" />
+                Konteks &amp; Signifikansi
+              </div>
               <p>{article.context_note}</p>
             </div>
           )}
+          {article.excerpt && <p className="article-lead">{article.excerpt}</p>}
+          <div className="article-body" dangerouslySetInnerHTML={{ __html: article.content }} />
           {article.tags && article.tags.length > 0 && (
             <div className="article-tags">
               {article.tags.map((tag) => (
