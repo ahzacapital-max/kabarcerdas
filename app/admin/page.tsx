@@ -59,9 +59,11 @@ export default function AdminPage() {
       <aside className="admin-sidebar">
         <div className="admin-logo">KC Admin</div>
         <nav>
-          <a className="admin-nav active">📊 Ringkasan</a>
-          <Link href="/" className="admin-nav">🏠 Lihat Portal</Link>
-        </nav>
+  <Link href="/admin" className="admin-nav active">📊 Ringkasan</Link>
+  <Link href="/admin/analytics" className="admin-nav">📈 Analitik</Link>
+  <Link href="/admin/upload" className="admin-nav">✍️ Upload Bahan</Link>
+  <Link href="/" className="admin-nav">🏠 Lihat Portal</Link>
+</nav>
       </aside>
 
       <main className="admin-main">
