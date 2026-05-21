@@ -6,7 +6,7 @@ const lora = Lora({ subsets: ['latin'], variable: '--font-serif', display: 'swap
 const dmSans = DM_Sans({ subsets: ['latin'], variable: '--font-sans', display: 'swap' })
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://kabarcerdas.id'),
+  metadataBase: new URL('https://kabarcerdaspisan.vercel.app'),
   title: { default: 'KabarCerdas', template: '%s — KabarCerdas' },
   description: 'Berita terkini dari sumber terpercaya, disajikan dengan jurnalisme berkualitas tinggi.',
   robots: { index: true, follow: true },
