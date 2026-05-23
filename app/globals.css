@@ -626,3 +626,14 @@ img { max-width: 100%; display: block; }
   .admin-sidebar { display: none; }
   .analytics-grid { grid-template-columns: 1fr; }
 }
+/* Admin nav alias */
+.admin-main { padding: 2rem; max-width: 960px; }
+.admin-title { font-family: var(--serif); font-size: 1.5rem; font-weight: 600; margin-bottom: 1.5rem; }
+.admin-logo { font-family: var(--serif); color: #fff; font-size: 1.1rem; padding: 0 1.25rem 1.25rem; border-bottom: 1px solid rgba(255,255,255,.1); margin-bottom: .75rem; }
+.admin-nav { display: block; padding: .55rem 1.25rem; font-size: .78rem; color: rgba(255,255,255,.55); transition: all .2s; }
+.admin-nav:hover, .admin-nav.active { color: #fff; background: rgba(255,255,255,.08); }
+.stat-val { font-size: 2rem; font-weight: 700; color: var(--ink); line-height: 1; }
+.action-row { display: flex; gap: .75rem; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.action-msg { font-size: .8rem; color: var(--ink2); }
+.section-title { font-family: var(--serif); font-size: 1rem; font-weight: 600; margin-bottom: .75rem; }
+.queue-table { background: #fff; border: 1px solid var(--paper3); border-radius: 6px; overflow: hidden; }
