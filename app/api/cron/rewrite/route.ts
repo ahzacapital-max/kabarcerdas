@@ -23,20 +23,39 @@ export async function GET(request: Request) {
       .gte('published_at', today.toISOString())
 
     if ((todayCount ?? 0) >= 15) {
-      return NextResponse.json({ ok: true, processed: 0, message: 'Batas 15 artikel per hari tercapai' })
+      return NextResponse.json({
+        ok: true,
+        processed: 0,
+        message: 'Batas 15 artikel per hari tercapai',
+      })
     }
 
     const remaining = 15 - (todayCount ?? 0)
+
+    // getUnprocessedRaw sekarang sudah mengembalikan artikel yang di-score & diurutkan
     const raws = await getUnprocessedRaw(Math.min(5, remaining))
 
     if (raws.length === 0) {
-      return NextResponse.json({ ok: true, processed: 0, message: 'Tidak ada artikel baru' })
+      return NextResponse.json({
+        ok: true,
+        processed: 0,
+        message: 'Tidak ada artikel baru yang lolos scoring',
+      })
     }
 
     let processed = 0
     let failed = 0
+    const scoreLog: Array<{ id: string; title: string; score: number; breakdown: object }> = []
 
     for (const raw of raws) {
+      // Log skor untuk monitoring
+      scoreLog.push({
+        id: raw.id,
+        title: raw.title,
+        score: raw.score,
+        breakdown: raw.scoreBreakdown,
+      })
+
       try {
         const result = await rewriteArticle({
           title: raw.title,
@@ -72,7 +91,7 @@ export async function GET(request: Request) {
       }
     }
 
-    return NextResponse.json({ ok: true, processed, failed })
+    return NextResponse.json({ ok: true, processed, failed, scoreLog })
   } catch (err) {
     console.error('[CRON rewrite] error:', err)
     return NextResponse.json({ error: String(err) }, { status: 500 })
