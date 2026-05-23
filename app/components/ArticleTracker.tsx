@@ -3,7 +3,6 @@
 
 import { useEffect, useRef } from 'react'
 import { getSessionId } from '@/lib/useSession'
-
 type Props = {
   articleId: string
   category: string
