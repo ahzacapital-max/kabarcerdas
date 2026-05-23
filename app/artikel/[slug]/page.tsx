@@ -3,7 +3,7 @@ import { formatDate, formatRelativeTime } from '@/lib/utils'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import ArticleTracker from '../components/ArticleTracker'
+import ArticleTracker from '@/app/components/ArticleTracker'
 
 type Props = { params: Promise<{ slug: string }> }
 
