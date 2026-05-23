@@ -8,7 +8,6 @@ type RssItem = {
   author?: string
 }
 
-// Parse RSS XML sederhana tanpa dependency eksternal
 function parseRSS(xml: string): RssItem[] {
   const items: RssItem[] = []
   const itemRegex = /<item>([\s\S]*?)<\/item>/g
@@ -23,19 +22,25 @@ function parseRSS(xml: string): RssItem[] {
 
     const title = get('title')
     const link = get('link') || get('guid')
+
     if (title && link) {
-  // Skip berita lebih dari 24 jam
-  if (get('pubDate')) {
-    const age = Date.now() - new Date(get('pubDate')).getTime()
-    if (age > 24 * 60 * 60 * 1000) continue
+      // Skip berita lebih dari 24 jam
+      const pubDateStr = get('pubDate')
+      if (pubDateStr) {
+        const age = Date.now() - new Date(pubDateStr).getTime()
+        if (age > 24 * 60 * 60 * 1000) continue
+      }
+
+      items.push({
+        title,
+        link,
+        description: get('description').replace(/<[^>]+>/g, '').slice(0, 2000),
+        pubDate: pubDateStr || get('pubDate'),
+        author: get('author') || get('dc:creator'),
+      })
+    }
   }
-  items.push({
-    title,
-    link,
-    description: get('description').replace(/<[^>]+>/g, '').slice(0, 2000),
-    pubDate: get('pubDate'),
-    author: get('author') || get('dc:creator'),
-  })
+  return items
 }
 
 export async function fetchAndSaveSource(source: {
@@ -54,7 +59,7 @@ export async function fetchAndSaveSource(source: {
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
 
     const xml = await res.text()
-    const items = parseRSS(xml).slice(0, 5) // max 15 per fetch
+    const items = parseRSS(xml).slice(0, 5)
 
     for (const item of items) {
       try {
@@ -68,11 +73,10 @@ export async function fetchAndSaveSource(source: {
         })
         saved++
       } catch {
-        skipped++ // duplicate atau error
+        skipped++
       }
     }
 
-    // Update last_fetched_at
     await supabaseAdmin()
       .from('sources')
       .update({ last_fetched_at: new Date().toISOString(), fetch_count: saved })
@@ -105,7 +109,6 @@ export async function fetchAllSources() {
   return { totalSaved, totalSkipped }
 }
 
-// Ambil artikel mentah yang belum diproses
 export async function getUnprocessedRaw(limit = 10) {
   const { data, error } = await supabaseAdmin()
     .from('articles_raw')
@@ -115,6 +118,7 @@ export async function getUnprocessedRaw(limit = 10) {
     .limit(limit)
 
   if (error) throw error
+
   return (data ?? []).map((r: any) => ({
     id: r.id,
     title: r.title,
