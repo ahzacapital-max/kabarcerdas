@@ -31,8 +31,6 @@ export async function GET(request: Request) {
     }
 
     const remaining = 15 - (todayCount ?? 0)
-
-    // getUnprocessedRaw sekarang sudah mengembalikan artikel yang di-score & diurutkan
     const raws = await getUnprocessedRaw(Math.min(5, remaining))
 
     if (raws.length === 0) {
@@ -48,7 +46,6 @@ export async function GET(request: Request) {
     const scoreLog: Array<{ id: string; title: string; score: number; breakdown: object }> = []
 
     for (const raw of raws) {
-      // Log skor untuk monitoring
       scoreLog.push({
         id: raw.id,
         title: raw.title,
@@ -89,6 +86,18 @@ export async function GET(request: Request) {
         console.error(`[CRON rewrite] Gagal proses ${raw.id}:`, err)
         failed++
       }
+    }
+
+    // Mark artikel yang tidak terpilih dalam batch ini sebagai skip (processed = true)
+    // supaya tidak menumpuk dan menghambat artikel baru di batch berikutnya
+    if (raws.length > 0) {
+      const selectedIds = raws.map((r) => r.id)
+      await supabaseAdmin()
+        .from('articles_raw')
+        .update({ processed: true })
+        .eq('processed', false)
+        .not('id', 'in', `(${selectedIds.join(',')})`)
+        .gte('fetched_at', new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString())
     }
 
     return NextResponse.json({ ok: true, processed, failed, scoreLog })
