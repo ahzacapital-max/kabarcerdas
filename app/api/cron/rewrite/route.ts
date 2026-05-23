@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getUnprocessedRaw } from '@/lib/rss'
 import { rewriteArticle } from '@/lib/claude'
-import { saveArticle, markRawProcessed } from '@/lib/supabase'
+import { saveArticle, markRawProcessed, supabaseAdmin } from '@/lib/supabase'
 
 export const runtime = 'nodejs'
 export const maxDuration = 300
@@ -13,7 +13,22 @@ export async function GET(request: Request) {
   }
 
   try {
-    const raws = await getUnprocessedRaw(5) // proses 8 artikel per run
+    // Cek berapa artikel sudah direwrite hari ini
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+
+    const { count: todayCount } = await supabaseAdmin()
+      .from('articles')
+      .select('id', { count: 'exact', head: true })
+      .gte('published_at', today.toISOString())
+
+    if ((todayCount ?? 0) >= 15) {
+      return NextResponse.json({ ok: true, processed: 0, message: 'Batas 15 artikel per hari tercapai' })
+    }
+
+    const remaining = 15 - (todayCount ?? 0)
+    const raws = await getUnprocessedRaw(Math.min(5, remaining))
+
     if (raws.length === 0) {
       return NextResponse.json({ ok: true, processed: 0, message: 'Tidak ada artikel baru' })
     }
@@ -50,8 +65,6 @@ export async function GET(request: Request) {
 
         await markRawProcessed(raw.id)
         processed++
-
-        // Delay antar artikel
         await new Promise((r) => setTimeout(r, 1500))
       } catch (err) {
         console.error(`[CRON rewrite] Gagal proses ${raw.id}:`, err)
