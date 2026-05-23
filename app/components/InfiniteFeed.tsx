@@ -65,8 +65,8 @@ export default function InfiniteFeed({ initialArticles, batchSize, category }: P
   return (
     <div className="feed-container">
       {articles.map((article, i) => (
-        <>
-          <article key={article.id} className={`feed-item${i === 0 ? ' feed-item--hero' : ''}`}>
+        <div key={article.id}>
+          <article className={`feed-item${i === 0 ? ' feed-item--hero' : ''}`}>
             <Link href={`/artikel/${article.slug}`} className="feed-item-link">
               <div className="feed-item-category">{article.category}</div>
               <h2 className="feed-item-title">{article.title}</h2>
@@ -90,7 +90,7 @@ export default function InfiniteFeed({ initialArticles, batchSize, category }: P
 
           {/* Sisipkan rekomendasi setelah artikel ke-5 */}
           {i === 4 && <RecommendFeed />}
-        </>
+        </div>
       ))}
 
       <div ref={sentinelRef} style={{ height: '1px' }} />
