@@ -24,16 +24,18 @@ function parseRSS(xml: string): RssItem[] {
     const title = get('title')
     const link = get('link') || get('guid')
     if (title && link) {
-      items.push({
-        title,
-        link,
-        description: get('description').replace(/<[^>]+>/g, '').slice(0, 2000),
-        pubDate: get('pubDate'),
-        author: get('author') || get('dc:creator'),
-      })
-    }
+  // Skip berita lebih dari 24 jam
+  if (get('pubDate')) {
+    const age = Date.now() - new Date(get('pubDate')).getTime()
+    if (age > 24 * 60 * 60 * 1000) continue
   }
-  return items
+  items.push({
+    title,
+    link,
+    description: get('description').replace(/<[^>]+>/g, '').slice(0, 2000),
+    pubDate: get('pubDate'),
+    author: get('author') || get('dc:creator'),
+  })
 }
 
 export async function fetchAndSaveSource(source: {
