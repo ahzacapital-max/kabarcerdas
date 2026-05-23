@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 }
 
-const CATEGORIES = ['Nasional','Ekonomi','Politik','Teknologi','Dunia','Daerah','Bisnis','Olahraga','Sepakbola','Viral']
+const CATEGORIES = ['Nasional','Ekonomi','Politik','Teknologi','Dunia','Daerah','Bisnis','Olahraga','Viral']
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

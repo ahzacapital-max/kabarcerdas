@@ -27,6 +27,11 @@ Panduan penulisan:
 - Panjang konten: 350-450 kata
 - Bahasa: Indonesia formal namun mudah dipahami pembaca umum
 - Tambahkan paragraf "Konteks & Signifikansi" yang menjelaskan mengapa berita ini penting
+- Kategori HANYA: Nasional | Ekonomi | Teknologi | Dunia | Politik | Olahraga | Daerah | Viral
+- Berita sepakbola, bola, liga, timnas → kategori: Olahraga
+- Berita bisnis, keuangan, pasar modal, saham → kategori: Ekonomi
+- Berita daerah HANYA jika menyebut Sumedang, Majalengka, atau Subang → kategori: Daerah. Selain itu masukkan ke Nasional
+- PENTING: Jangan mengarang fakta spesifik seperti nama tempat, harga, atau lokasi yang tidak kamu ketahui pasti
 
 PENTING: Selalu balas dalam format JSON yang valid. Jangan tambahkan teks apapun di luar JSON.`
 
@@ -47,9 +52,9 @@ FORMAT JSON yang harus kamu kembalikan:
 {
   "title": "judul baru yang informatif dan tidak clickbait (max 80 karakter)",
   "excerpt": "ringkasan 1-2 kalimat untuk preview (max 160 karakter)",
-  "content": "konten artikel lengkap 350-450 kata dalam format paragraf HTML (<p>...)</p>",
+  "content": "konten artikel lengkap 350-450 kata dalam format paragraf HTML (<p>...</p>)",
   "context_note": "1 paragraf analisis konteks dan signifikansi berita ini (2-3 kalimat)",
-  "category": "satu dari: Nasional | Ekonomi | Teknologi | Dunia | Politik | Olahraga | Viral | Lingkungan | Kesehatan",
+  "category": "satu dari: Nasional | Ekonomi | Teknologi | Dunia | Politik | Olahraga | Daerah | Viral",
   "tags": ["tag1", "tag2", "tag3", "tag4", "tag5"],
   "seo_title": "judul SEO optimal (50-60 karakter)",
   "seo_description": "meta description (120-155 karakter)",
@@ -68,18 +73,15 @@ FORMAT JSON yang harus kamu kembalikan:
     .map((b) => b.text)
     .join('')
 
-  // Strip markdown fences jika ada
   const clean = text.replace(/```json\n?|\n?```/g, '').trim()
   const parsed = JSON.parse(clean) as RewriteResult
 
-  // Generate slug dari judul
   parsed.slug = slugify(parsed.title) + '-' + Date.now().toString(36)
   parsed.reading_time = Math.max(2, Math.ceil((parsed.content.split(' ').length) / 200))
 
   return parsed
 }
 
-// Batch rewrite — proses beberapa artikel sekaligus dengan delay
 export async function batchRewrite(
   articles: Array<{ id: string; title: string; content: string; source: string; url: string }>,
   onDone?: (id: string, result: RewriteResult) => Promise<void>
@@ -94,7 +96,6 @@ export async function batchRewrite(
       console.error(`Gagal rewrite ${article.id}:`, err)
       results.push({ id: article.id, success: false, error: String(err) })
     }
-    // Rate limit — tunggu 1.5 detik antar request
     await new Promise((r) => setTimeout(r, 1500))
   }
   return results
