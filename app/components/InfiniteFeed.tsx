@@ -83,15 +83,7 @@ export default function InfiniteFeed({ initialArticles, batchSize, category }: P
               <p className="feed-item-excerpt">{article.excerpt}</p>
             )}
           </Link>
-          {article.context_note && (
-            <div className="sorotan-cerdas">
-              <span className="sorotan-icon">🟧</span>
-              <div>
-                <span className="sorotan-label">Sorotan Cerdas</span>
-                <span className="sorotan-text">{article.context_note}</span>
-              </div>
-            </div>
-          )}
+
           <div className="feed-divider" />
         </article>
       ))}
