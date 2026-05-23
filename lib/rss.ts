@@ -24,11 +24,6 @@ const TRUSTED_SOURCES: Record<string, number> = {
   'tribun':       15,
   'liputan6':     15,
   'okezone':      10,
-  'sumedang':     20,
-  'majalengka':   20,
-  'subang':       20,
-  'radarsukabumi':15,
-  'jabar':        15,
 }
 
 const HIGH_PRIORITY_KEYWORDS: Array<{ pattern: RegExp; score: number }> = [
@@ -42,19 +37,15 @@ const HIGH_PRIORITY_KEYWORDS: Array<{ pattern: RegExp; score: number }> = [
   { pattern: /hukum|mahkamah|mk|ma|pengadilan/i,         score: 30 },
   { pattern: /kesehatan|wabah|virus|pandemi|vaksin/i,    score: 35 },
   { pattern: /pendidikan|beasiswa|kampus|kemdikbud/i,    score: 25 },
-  { pattern: /liga champions|premier league|serie a|bundesliga|la liga/i, score: 30 },
-  { pattern: /sumedang|majalengka|subang/i,              score: 35 },
 ]
 
 const LOW_PRIORITY_KEYWORDS: Array<{ pattern: RegExp; penalty: number }> = [
-  { pattern: /zodiak|ramalan|horoskop/i,               penalty: 50 },
-  { pattern: /gosip|selebritis|seleb/i,                penalty: 30 },
-  { pattern: /viral tiktok|tiktok|reels|fyp/i,         penalty: 25 },
-  { pattern: /resep|kuliner|makanan enak/i,             penalty: 20 },
-  { pattern: /fashion|outfit|ootd/i,                   penalty: 20 },
-  { pattern: /drakor|kdrama|k-pop|kpop/i,              penalty: 15 },
-  { pattern: /cleansing|skincare|serum|moisturizer/i,  penalty: 25 },
-  { pattern: /rekomendasi produk|review produk/i,      penalty: 20 },
+  { pattern: /gosip|selebritis|seleb|artis/i,  penalty: 30 },
+  { pattern: /viral tiktok|tiktok|reels|fyp/i, penalty: 25 },
+  { pattern: /zodiak|ramalan|horoskop/i,        penalty: 35 },
+  { pattern: /resep|kuliner|makanan enak/i,     penalty: 20 },
+  { pattern: /fashion|outfit|ootd/i,            penalty: 20 },
+  { pattern: /drakor|kdrama|k-pop|kpop/i,       penalty: 15 },
 ]
 
 export type ScoredRaw = {
@@ -81,6 +72,7 @@ export function scoreArticle(
   const text = `${title} ${content}`.toLowerCase()
   const sourceKey = sourceName.toLowerCase()
 
+  // 1. Sumber terpercaya (0–30)
   let sourceScore = 0
   for (const [key, val] of Object.entries(TRUSTED_SOURCES)) {
     if (sourceKey.includes(key)) {
@@ -89,6 +81,7 @@ export function scoreArticle(
     }
   }
 
+  // 2. Topik penting — ambil nilai tertinggi, kurangi jika ada keyword rendah
   let topicScore = 0
   for (const { pattern, score } of HIGH_PRIORITY_KEYWORDS) {
     if (pattern.test(text)) topicScore = Math.max(topicScore, score)
@@ -97,8 +90,10 @@ export function scoreArticle(
     if (pattern.test(text)) topicScore -= penalty
   }
 
-  const lengthScore = content.length >= 50 ? 10 : 0
+  // 3. Panjang konten (+10 jika ≥200 karakter)
+  const lengthScore = content.length >= 200 ? 10 : 0
 
+  // 4. Anti-duplikat topik (+20 jika unik dalam batch)
   const titleWords = new Set(
     title.toLowerCase().split(/\s+/).filter((w) => w.length > 4)
   )
@@ -189,7 +184,7 @@ export async function fetchAndSaveSource(source: {
         })
         saved++
       } catch {
-        skipped++
+        skipped++ // duplicate atau error
       }
     }
 
@@ -204,6 +199,10 @@ export async function fetchAndSaveSource(source: {
   return { saved, skipped }
 }
 
+/**
+ * Fetch 5 sumber yang paling lama tidak di-fetch.
+ * Karena last_fetched_at diupdate setiap run, semua sumber bergilir otomatis.
+ */
 export async function fetchAllSources(batchSize = 5) {
   const { data: sources, error } = await supabaseAdmin()
     .from('sources')
@@ -230,15 +229,19 @@ export async function fetchAllSources(batchSize = 5) {
 // QUERY: ambil artikel mentah + scoring
 // ─────────────────────────────────────────────
 
-const SCORE_THRESHOLD = 0
+const SCORE_THRESHOLD = 40
 
+/**
+ * Ambil artikel mentah yang belum diproses, sudah di-score & diurutkan skor tertinggi.
+ * Artikel skor < SCORE_THRESHOLD di-skip otomatis.
+ */
 export async function getUnprocessedRaw(limit = 10): Promise<ScoredRaw[]> {
   const { data, error } = await supabaseAdmin()
     .from('articles_raw')
     .select('id, title, original_content, original_url, sources(name)')
     .eq('processed', false)
     .order('fetched_at', { ascending: true })
-    .limit(limit * 6)
+    .limit(limit * 4) // ambil lebih banyak supaya setelah filter masih cukup
 
   if (error) throw error
 
