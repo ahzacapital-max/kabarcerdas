@@ -29,6 +29,8 @@ Panduan penulisan:
 - Bahasa: Indonesia formal namun mudah dipahami pembaca umum
 - Jika berita tentang sepak bola (Liga Indonesia, Liga Inggris, Liga Champions, timnas, transfer pemain, dll) WAJIB kategori: Sepakbola
 - Jika berita tentang olahraga selain sepak bola (bulutangkis, basket, atletik, dll) kategori: Olahraga
+- Kategori "Daerah" HANYA untuk berita yang secara spesifik terjadi di atau menyangkut wilayah: Sumedang, Majalengka, atau Subang. Jika berita daerah dari wilayah lain (Bandung, Jakarta, Bekasi, dll), pilih kategori lain yang sesuai (Nasional, Ekonomi, Politik, dll) — JANGAN gunakan kategori Daerah.
+- Jika berita menyebut Sumedang, Majalengka, atau Subang tapi juga relevan secara nasional, tetap gunakan kategori Daerah.
 - Tulis bagian "Konteks & Signifikansi" yang menjawab 4 pertanyaan ini dalam 1 paragraf padat:
   1. Apa latar belakang kejadian ini?
   2. Kenapa isu ini penting?
