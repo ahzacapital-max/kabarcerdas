@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import Link from 'next/link'
 import type { Article } from '@/lib/supabase'
+import RecommendFeed from './RecommendFeed'
 
 function formatRelativeTime(dateStr: string) {
   const diff = Date.now() - new Date(dateStr).getTime()
@@ -64,31 +65,34 @@ export default function InfiniteFeed({ initialArticles, batchSize, category }: P
   return (
     <div className="feed-container">
       {articles.map((article, i) => (
-        <article key={article.id} className={`feed-item${i === 0 ? ' feed-item--hero' : ''}`}>
-          <Link href={`/artikel/${article.slug}`} className="feed-item-link">
-            <div className="feed-item-category">{article.category}</div>
-            <h2 className="feed-item-title">{article.title}</h2>
-            <div className="feed-item-meta">
-              <span>Redaksi KabarCerdas</span>
-              <span className="feed-meta-dot">·</span>
-              <span>{formatRelativeTime(article.published_at)}</span>
-              {article.reading_time && (
-                <>
-                  <span className="feed-meta-dot">·</span>
-                  <span>{article.reading_time} mnt baca</span>
-                </>
+        <>
+          <article key={article.id} className={`feed-item${i === 0 ? ' feed-item--hero' : ''}`}>
+            <Link href={`/artikel/${article.slug}`} className="feed-item-link">
+              <div className="feed-item-category">{article.category}</div>
+              <h2 className="feed-item-title">{article.title}</h2>
+              <div className="feed-item-meta">
+                <span>Redaksi KabarCerdas</span>
+                <span className="feed-meta-dot">·</span>
+                <span>{formatRelativeTime(article.published_at)}</span>
+                {article.reading_time && (
+                  <>
+                    <span className="feed-meta-dot">·</span>
+                    <span>{article.reading_time} mnt baca</span>
+                  </>
+                )}
+              </div>
+              {article.excerpt && (
+                <p className="feed-item-excerpt">{article.excerpt}</p>
               )}
-            </div>
-            {article.excerpt && (
-              <p className="feed-item-excerpt">{article.excerpt}</p>
-            )}
-          </Link>
+            </Link>
+            <div className="feed-divider" />
+          </article>
 
-          <div className="feed-divider" />
-        </article>
+          {/* Sisipkan rekomendasi setelah artikel ke-5 */}
+          {i === 4 && <RecommendFeed />}
+        </>
       ))}
 
-      {/* Sentinel untuk IntersectionObserver */}
       <div ref={sentinelRef} style={{ height: '1px' }} />
 
       {loading && (

@@ -3,6 +3,7 @@ import { formatDate, formatRelativeTime } from '@/lib/utils'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
+import ArticleTracker from '../components/ArticleTracker'
 
 type Props = { params: Promise<{ slug: string }> }
 
@@ -35,6 +36,13 @@ export default async function ArticlePage({ params }: Props) {
 
   return (
     <div className="article-layout">
+      {/* Tracking — client component, tidak terlihat user */}
+      <ArticleTracker
+        articleId={article.id}
+        category={article.category}
+        tags={article.tags ?? []}
+      />
+
       <Link href="/" className="back-btn">← Beranda</Link>
 
       <article>
@@ -110,7 +118,7 @@ export default async function ArticlePage({ params }: Props) {
         )}
       </article>
 
-      {/* Berita terkait - di bawah artikel, bukan sidebar */}
+      {/* Berita terkait */}
       {others.length > 0 && (
         <div className="article-related">
           <div className="article-related-heading">Berita Terkait</div>
