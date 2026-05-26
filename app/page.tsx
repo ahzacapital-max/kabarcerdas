@@ -1,40 +1,35 @@
-import { getLatestArticles } from '@/lib/supabase'
-import { headers } from 'next/headers'
-import InfiniteFeed from './components/InfiniteFeed'
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
+import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
+import PersonalizedFeed from '@/app/components/PersonalizedFeed'
 import type { Metadata } from 'next'
 
-export const revalidate = 300
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'KabarCerdas — Membaca Fakta Lebih Cerdas',
-  description: 'Konteks & signifikansi di setiap berita. Baca KabarCerdas — nyaman tanpa iklan, paham lebih dalam.',
-  openGraph: {
-    title: 'KabarCerdas',
-    description: 'Membaca Fakta Lebih Cerdas',
-    url: 'https://kabarcerdas.my.id',
-    siteName: 'KabarCerdas',
-    locale: 'id_ID',
-    type: 'website',
-  },
-}
-
-function getInitialBatch(ua: string): number {
-  const isMobile = /mobile|android|iphone|ipad|ipod/i.test(ua)
-  return isMobile ? 5 : 8
+  description: 'Kurasi berita terpercaya, dipersonalisasi untuk kamu.',
 }
 
 export default async function HomePage() {
-  const headersList = await headers()
-  const ua = headersList.get('user-agent') || ''
-  const initialBatch = getInitialBatch(ua)
-  const batchSize = 10
+  const supabase = createServerComponentClient({ cookies })
+  const { data: { session } } = await supabase.auth.getSession()
 
-  const articles = await getLatestArticles(initialBatch)
+  // Kalau belum login, redirect ke login
+  if (!session) {
+    redirect('/login')
+  }
 
-  return (
-    <InfiniteFeed
-      initialArticles={articles}
-      batchSize={batchSize}
-    />
-  )
+  // Cek onboarding
+  const { data: prefs } = await supabase
+    .from('user_preferences')
+    .select('onboarded')
+    .eq('user_id', session.user.id)
+    .single()
+
+  if (!prefs?.onboarded) {
+    redirect('/onboarding')
+  }
+
+  return <PersonalizedFeed />
 }
